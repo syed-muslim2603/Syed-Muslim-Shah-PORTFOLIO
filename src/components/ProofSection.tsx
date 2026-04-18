@@ -50,8 +50,9 @@ export default function ProofSection() {
                   src={proof.image}
                   alt={proof.alt}
                   fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={true}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-contain transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="flex-grow flex items-center justify-center text-center px-2">
