@@ -14,28 +14,31 @@ export default function ScrollyCanvas() {
   });
   
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const [fallbackImage, setFallbackImage] = useState<string | null>(null);
-  const frameCount = 120; // 000 to 119
   const currentFrameRef = useRef(0);
+  const frameCount = 120; // 000 to 119
 
-  const drawFrame = useCallback((index: number, imgArray: HTMLImageElement[] = imagesRef.current) => {
-    if (!canvasRef.current || imgArray.length === 0) return;
+  const drawFrame = useCallback((index: number) => {
+    if (!canvasRef.current || imagesRef.current.length === 0) return;
+    
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    const validIndex = Math.min(index, imgArray.length - 1);
-    const img = imgArray[validIndex];
-    if (!img) return;
+    const validIndex = Math.min(index, imagesRef.current.length - 1);
+    const img = imagesRef.current[validIndex];
+    if (!img || !img.complete || img.naturalWidth === 0) return;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     
-    // Prevent errors if canvas has no layout dimensions yet
     if (canvasWidth === 0 || canvasHeight === 0) return;
 
+    // Highest quality cinematic smoothing (prevents pixelation)
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
     const canvasRatio = canvasWidth / canvasHeight;
-    const imgRatio = img.width / img.height;
+    const imgRatio = img.naturalWidth / img.naturalHeight;
 
     let drawWidth, drawHeight, offsetX, offsetY;
 
@@ -51,14 +54,14 @@ export default function ScrollyCanvas() {
       offsetY = 0;
     }
 
-    // Clear rect instead of fillRect so the fallback image can show through 
-    // if the canvas fails or clears unexpectedly on mobile.
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    ctx.fillStyle = "#121212";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     
     currentFrameRef.current = validIndex;
   }, []);
 
+  // Preloading
   useEffect(() => {
     let isCancelled = false;
     const loadedImages: HTMLImageElement[] = new Array(frameCount);
@@ -78,8 +81,8 @@ export default function ScrollyCanvas() {
           loadedImages[i] = img;
           
           if (i === 0) {
-            setFallbackImage(img.src);
-            drawFrame(0, [img]);
+             imagesRef.current[0] = img; // Make first frame available immediately
+             drawFrame(0);
           }
           resolve();
         };
@@ -97,11 +100,12 @@ export default function ScrollyCanvas() {
       const validImages = loadedImages.filter(Boolean);
       if (validImages.length > 0) {
         imagesRef.current = validImages;
+        
         const currentIndex = Math.min(
           validImages.length - 1,
           Math.max(0, Math.floor(scrollYProgress.get() * frameCount))
         );
-        drawFrame(currentIndex, validImages);
+        drawFrame(currentIndex);
       }
     });
 
@@ -110,9 +114,8 @@ export default function ScrollyCanvas() {
     };
   }, [drawFrame, scrollYProgress]);
 
-  // Framer Motion's useMotionValueEvent is already synced to the render loop.
-  // Using requestAnimationFrame inside here defers drawing and causes vanishing 
-  // on mobile when resizes/scrolls conflict. Draw immediately instead.
+  // Framer Motion automatically syncs this callback with rendering pipeline.
+  // Direct function call ensures immediate drawing, no weird mobile vanishing behavior.
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (imagesRef.current.length === 0) return;
     const frameIndex = Math.min(
@@ -123,75 +126,73 @@ export default function ScrollyCanvas() {
   });
 
   useEffect(() => {
-    let lastWidth = window.innerWidth;
     let resizeFrame: number;
-    
-    const handleResize = () => {
-      cancelAnimationFrame(resizeFrame);
-      resizeFrame = requestAnimationFrame(() => {
-        if (!canvasRef.current) return;
-        
-        const currentWidth = window.innerWidth;
-        const currentHeight = window.innerHeight;
-        
-        // Mobile optimization: Scrolling often hides/shows the address bar, changing innerHeight 
-        // but not innerWidth. Resetting canvas dimensions clears it, causing vanishing. 
-        // We only resize if the width actually changes (like an orientation change) or on initial mount.
-        if (currentWidth === lastWidth && canvasRef.current.width > 0) {
-          return; 
-        }
-        
-        lastWidth = currentWidth;
-        
-        const dpr = window.devicePixelRatio || 1;
-        canvasRef.current.width = currentWidth * dpr;
-        canvasRef.current.height = currentHeight * dpr;
-        canvasRef.current.style.width = `${currentWidth}px`;
-        canvasRef.current.style.height = `${currentHeight}px`;
+    let lastWidth = 0;
+    let lastHeight = 0;
 
-        if (imagesRef.current.length > 0) {
-          drawFrame(currentFrameRef.current);
-        }
-      });
+    const handleResize = () => {
+      if (!canvasRef.current || !canvasRef.current.parentElement) return;
+      
+      const parent = canvasRef.current.parentElement;
+      const currentWidth = parent.clientWidth;
+      const currentHeight = parent.clientHeight;
+      
+      // Prevent mobile vertical scroll bar vanishing / weird scaling issues
+      // Ignore vertical only resizes on mobile (e.g. url bar hide)
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && currentWidth === lastWidth && canvasRef.current.width > 0) {
+        return;
+      }
+
+      lastWidth = currentWidth;
+      lastHeight = currentHeight;
+      
+      const dpr = window.devicePixelRatio || 1;
+      
+      // Actual buffer dimensions scaled by Device Pixel Ratio for ultimate sharpness
+      canvasRef.current.width = currentWidth * dpr;
+      canvasRef.current.height = currentHeight * dpr;
+      
+      // CSS display size covers exactly 100%
+      canvasRef.current.style.width = "100%";
+      canvasRef.current.style.height = "100%";
+
+      if (imagesRef.current.length > 0) {
+        drawFrame(currentFrameRef.current);
+      }
     };
     
-    // Initial setup
+    // Initial size calc
     handleResize();
     
-    window.addEventListener("resize", handleResize, { passive: true });
+    const debouncedResize = () => {
+      cancelAnimationFrame(resizeFrame);
+      resizeFrame = requestAnimationFrame(handleResize);
+    };
+
+    window.addEventListener("resize", debouncedResize, { passive: true });
     window.addEventListener("orientationchange", () => {
-      setTimeout(handleResize, 100);
-      setTimeout(handleResize, 300); // Fallback for Safari's delayed rotation firing
+      setTimeout(handleResize, 100); // Safari fix
     });
     
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", debouncedResize);
       window.removeEventListener("orientationchange", handleResize);
       cancelAnimationFrame(resizeFrame);
     };
   }, [drawFrame]);
 
   return (
-    <div ref={containerRef} className="h-[500vh] w-full relative touch-pan-y">
-      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#121212] will-change-transform">
+    <div ref={containerRef} className="h-[500vh] w-full relative">
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#121212]">
         
-        {/* Fallback image sits permanently behind the canvas */}
-        {fallbackImage && (
-          <img 
-            src={fallbackImage} 
-            alt="Fallback Sequence Frame" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
-        
-        {/* Canvas overlays the fallback. */}
+        {/* Cinematic sequence canvas */}
         <canvas 
           ref={canvasRef} 
           className="absolute inset-0 w-full h-full block" 
-          style={{ imageRendering: "crisp-edges", willChange: "transform" }}
         />
         
-        <div className="absolute inset-0 bg-black/60 pointer-events-none" /> {/* Overlay darkening for text readability */}
+        <div className="absolute inset-0 bg-black/60 pointer-events-none" />
         <Overlay containerRef={containerRef} />
       </div>
     </div>

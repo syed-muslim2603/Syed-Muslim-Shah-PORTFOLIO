@@ -33,10 +33,10 @@ export default function Overlay({ containerRef }: OverlayProps) {
         className="absolute w-full flex flex-col items-center justify-center text-center px-4"
       >
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-2xl">
-          Muslim Shah.
+          Rashdi
         </h1>
         <p className="mt-6 text-xl md:text-2xl text-zinc-300 font-medium tracking-wide drop-shadow-md">
-          E-Commerce Growth Specialist.
+          Creative Developer
         </p>
       </motion.div>
 
