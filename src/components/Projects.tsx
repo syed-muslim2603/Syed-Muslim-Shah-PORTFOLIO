@@ -1,5 +1,6 @@
 import { ExternalLink, Target, LineChart, TrendingUp, Code, Palette, Zap } from "lucide-react";
 import Image from "next/image";
+import SkillsTornado from "./SkillsTornado";
 
 export default function Projects() {
   const caseStudies = [
@@ -132,6 +133,9 @@ export default function Projects() {
             ))}
           </div>
         </div>
+
+        {/* Cinematic Skills Vortex */}
+        <SkillsTornado />
 
       </div>
     </section>
