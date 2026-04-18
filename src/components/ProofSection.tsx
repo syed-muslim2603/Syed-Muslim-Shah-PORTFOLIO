@@ -45,13 +45,13 @@ export default function ProofSection() {
               whileHover={{ scale: 1.01 }}
               className="group flex flex-col p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 backdrop-blur-md hover:bg-zinc-800/60 hover:shadow-[0_0_30px_-5px_rgba(52,211,153,0.15)] hover:border-emerald-500/30 transition-all duration-300 relative overflow-hidden cursor-pointer"
             >
-              <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 bg-zinc-950/50 border border-zinc-800/50">
+              <div className="relative w-full aspect-[9/16] rounded-xl overflow-hidden mb-5 bg-zinc-950/50 border border-zinc-800/50 shadow-inner group-hover:shadow-[0_0_20px_-5px_rgba(52,211,153,0.2)] transition-shadow duration-500">
                 <Image
                   src={proof.image}
                   alt={proof.alt}
                   fill
                   priority={true}
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 400px"
                   className="object-contain transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
