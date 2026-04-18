@@ -1,5 +1,6 @@
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Projects from "@/components/Projects";
+import ProofSection from "@/components/ProofSection";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -16,6 +17,11 @@ export default function Home() {
         It has a z-index to appear on top of the relative flow.
       */}
       <Projects />
+      
+      {/* 
+        Data & Dashboard proofs section.
+      */}
+      <ProofSection />
       
       {/* 
         Action Footer for links and CTAs.
