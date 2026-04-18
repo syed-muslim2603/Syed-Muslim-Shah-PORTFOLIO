@@ -6,17 +6,17 @@ import { motion } from "framer-motion";
 export default function ProofSection() {
   const proofs = [
     {
-      image: "/proofs/proof1.jpg.jpeg",
+      image: "/proofs/proof1.jpeg",
       caption: "Meta Ads: 7.04% CTR & $0.02 CPC",
       alt: "Meta Ads Dashboard"
     },
     {
-      image: "/proofs/proof2.jpg.jpeg",
+      image: "/proofs/proof2.jpeg",
       caption: "Funnel Diagnostics: 6% View-to-ATC drop-off identified",
       alt: "Funnel Diagnostics Dashboard"
     },
     {
-      image: "/proofs/proof3.jpg.jpeg",
+      image: "/proofs/proof3.jpeg",
       caption: "Organic Scale: 4.3K+ Visual Search Impressions",
       alt: "Pinterest Analytics Dashboard"
     }
