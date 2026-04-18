@@ -1,5 +1,6 @@
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Projects from "@/components/Projects";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -15,6 +16,11 @@ export default function Home() {
         It has a z-index to appear on top of the relative flow.
       */}
       <Projects />
+      
+      {/* 
+        Action Footer for links and CTAs.
+      */}
+      <Contact />
     </main>
   );
 }

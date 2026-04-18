@@ -183,7 +183,7 @@ export default function ScrollyCanvas() {
   }, [drawFrame]);
 
   return (
-    <div ref={containerRef} className="h-[500vh] w-full relative">
+    <div ref={containerRef} className="h-[500vh] w-full relative" style={{ position: "relative" }}>
       <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#121212]">
         
         {/* Cinematic sequence canvas */}
