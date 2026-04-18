@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
 import Overlay from "./Overlay";
 
@@ -13,66 +13,104 @@ export default function ScrollyCanvas() {
     offset: ["start start", "end end"]
   });
   
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const [fallbackImage, setFallbackImage] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
   const frameCount = 120; // 000 to 119
 
-  useEffect(() => {
-    // Preload images
-    const loadedImages: HTMLImageElement[] = [];
-    let loadedCount = 0;
-    
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      const frameNum = i.toString().padStart(3, "0");
-      img.src = `/sequence/frame_${frameNum}_delay-0.066s.png`;
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === frameCount) {
-          setImages(loadedImages);
-          // Draw first frame once all are loaded
-          drawFrame(0, loadedImages);
-        }
-      };
-      loadedImages.push(img);
-    }
-    // Cleanup if unmounted before loading is done, though not strictly necessary here.
-  }, []);
-
-  const drawFrame = (index: number, imgArray: HTMLImageElement[] = images) => {
+  const drawFrame = useCallback((index: number, imgArray: HTMLImageElement[] = imagesRef.current) => {
     if (!canvasRef.current || imgArray.length === 0) return;
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    const img = imgArray[index];
+    const validIndex = Math.min(index, imgArray.length - 1);
+    const img = imgArray[validIndex];
     if (!img) return;
 
-    // Object-fit: cover logic to make it look cinematic
-    const canvasRatio = canvas.width / canvas.height;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const canvasRatio = canvasWidth / canvasHeight;
     const imgRatio = img.width / img.height;
 
     let drawWidth, drawHeight, offsetX, offsetY;
 
     if (canvasRatio > imgRatio) {
-      drawWidth = canvas.width;
-      drawHeight = canvas.width / imgRatio;
+      drawWidth = canvasWidth;
+      drawHeight = canvasWidth / imgRatio;
       offsetX = 0;
-      offsetY = (canvas.height - drawHeight) / 2;
+      offsetY = (canvasHeight - drawHeight) / 2;
     } else {
-      drawWidth = canvas.height * imgRatio;
-      drawHeight = canvas.height;
-      offsetX = (canvas.width - drawWidth) / 2;
+      drawWidth = canvasHeight * imgRatio;
+      drawHeight = canvasHeight;
+      offsetX = (canvasWidth - drawWidth) / 2;
       offsetY = 0;
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#121212";
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-  };
+  }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const loadedImages: HTMLImageElement[] = new Array(frameCount);
+    let errorCount = 0;
+
+    const loadPromises = Array.from({ length: frameCount }).map((_, i) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        const frameNum = i.toString().padStart(3, "0");
+        img.src = `/sequence/frame_${frameNum}_delay-0.066s.png`;
+        
+        if (i === 0) {
+          img.fetchPriority = "high";
+        }
+
+        img.onload = () => {
+          if (isCancelled) return resolve();
+          loadedImages[i] = img;
+          
+          if (i === 0) {
+            setFallbackImage(img.src);
+            drawFrame(0, [img]);
+          }
+          resolve();
+        };
+
+        img.onerror = () => {
+          if (isCancelled) return resolve();
+          errorCount++;
+          console.warn(`Failed to load frame ${i}`);
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(loadPromises).then(() => {
+      if (isCancelled) return;
+      const validImages = loadedImages.filter(Boolean);
+      if (validImages.length > 0) {
+        imagesRef.current = validImages;
+        const currentIndex = Math.min(
+          validImages.length - 1,
+          Math.max(0, Math.floor(scrollYProgress.get() * frameCount))
+        );
+        drawFrame(currentIndex, validImages);
+      } else {
+        setHasError(true);
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [drawFrame, scrollYProgress]);
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (images.length === 0) return;
+    if (imagesRef.current.length === 0) return;
     const frameIndex = Math.min(
-      frameCount - 1,
+      imagesRef.current.length - 1,
       Math.max(0, Math.floor(latest * frameCount))
     );
     requestAnimationFrame(() => drawFrame(frameIndex));
@@ -81,25 +119,45 @@ export default function ScrollyCanvas() {
   useEffect(() => {
     const handleResize = () => {
       if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-        // Redraw current frame on resize
-        const currentIndex = Math.min(
-          frameCount - 1,
-          Math.max(0, Math.floor(scrollYProgress.get() * frameCount))
-        );
-        drawFrame(currentIndex);
+        const dpr = window.devicePixelRatio || 1;
+        canvasRef.current.width = window.innerWidth * dpr;
+        canvasRef.current.height = window.innerHeight * dpr;
+        canvasRef.current.style.width = `${window.innerWidth}px`;
+        canvasRef.current.style.height = `${window.innerHeight}px`;
+
+        if (imagesRef.current.length > 0) {
+          const currentIndex = Math.min(
+            imagesRef.current.length - 1,
+            Math.max(0, Math.floor(scrollYProgress.get() * frameCount))
+          );
+          drawFrame(currentIndex);
+        }
       }
     };
-    handleResize(); // initial set
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [images]);
+    
+    handleResize();
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("orientationchange", () => {
+      setTimeout(handleResize, 100);
+    });
+    
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
+  }, [scrollYProgress, drawFrame]);
 
   return (
     <div ref={containerRef} className="h-[500vh] w-full relative">
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#121212]">
-        <canvas ref={canvasRef} className="w-full h-full" />
+      <div className="sticky top-0 h-[100svh] w-full overflow-hidden bg-[#121212]">
+        {hasError && fallbackImage ? (
+          <div 
+            className="absolute inset-0 w-full h-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${fallbackImage})` }}
+          />
+        ) : (
+          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
+        )}
         <div className="absolute inset-0 bg-black/60 pointer-events-none" /> {/* Overlay darkening for text readability */}
         <Overlay containerRef={containerRef} />
       </div>
