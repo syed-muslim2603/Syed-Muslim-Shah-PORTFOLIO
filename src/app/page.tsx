@@ -1,5 +1,6 @@
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Projects from "@/components/Projects";
+import GrowthOS from "@/components/GrowthOS";
 import ProofSection from "@/components/ProofSection";
 import Contact from "@/components/Contact";
 
@@ -18,6 +19,11 @@ export default function Home() {
       */}
       <Projects />
       
+      {/* 
+        Growth OS - Operating Principles.
+      */}
+      <GrowthOS />
+
       {/* 
         Data & Dashboard proofs section.
       */}
