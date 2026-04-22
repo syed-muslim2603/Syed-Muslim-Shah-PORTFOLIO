@@ -31,10 +31,10 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-pink-500">
-            Ready to scale?
+            Ready to Scale? Let's Talk.
           </h2>
           <p className="text-xl md:text-2xl text-zinc-400 mb-16 font-medium max-w-2xl mx-auto leading-relaxed">
-            Let's talk about driving $0.02 CPCs and fixing your funnel leaks.
+            Fully optimized for PST hours. Ready to step in as your First Marketing Hire or Lead Growth Engineer.
           </p>
         </motion.div>
 

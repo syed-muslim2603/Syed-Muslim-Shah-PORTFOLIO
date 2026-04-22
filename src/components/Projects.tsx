@@ -5,25 +5,25 @@ import SkillsTornado from "./SkillsTornado";
 export default function Projects() {
   const caseStudies = [
     {
-      title: "UAE Market Expansion & Acquisition",
-      role: "Performance Marketer",
-      description: "Engineered a high-efficiency paid acquisition engine for a D2C Shopify store targeting the UAE. Utilized pattern-interrupting visual hooks to achieve an ultra-low $0.02 CPC and a 7.04% CTR on Meta Ads.",
+      title: "High-Velocity Market Acquisition (UAE)",
+      role: "Performance Scaling",
+      description: "Engineered a creative testing sandbox for a competitive home goods venture. Achieved an ultra-low AED 0.07 ($0.02) CPC while maintaining a massive 7.04% CTR through pattern-interrupt visual strategies.",
       tech: ["Meta Ads", "Shopify", "A/B Testing", "Campaign Scaling"],
       icon: <Target className="w-6 h-6 text-blue-400" />,
       image: "/project1.jpg"
     },
     {
-      title: "Full-Funnel Conversion Diagnostics (CRO)",
-      role: "CRO Specialist",
-      description: "Implemented custom Facebook Pixel event tracking across 6,200+ pageviews to map the complete user journey. Successfully diagnosed a critical 6% View-to-ATC drop-off, allowing for targeted landing page redesigns to eliminate funnel leaks.",
+      title: "Full-Funnel Code Diagnostics (CRO)",
+      role: "Technical Intervention",
+      description: "Identified a silent 6% View-to-ATC drop-off causing revenue leakage. Bypassed standard UI limits by auditing and patching the custom Meta Pixel and CAPI event code, instantly recovering lost conversions.",
       tech: ["Pixel Tracking", "Funnel Analytics", "HTML/CSS", "Consumer Psychology"],
       icon: <LineChart className="w-6 h-6 text-emerald-400" />,
       image: "/project2.jpg"
     },
     {
-      title: "Organic Visual Search Scale",
-      role: "Content Strategist",
-      description: "Executed a 35-day organic growth campaign focused on SEO-optimized visual assets. Grew account reach from zero to 4.3K+ impressions with a platform-beating 4.4% engagement rate, completely independent of ad spend.",
+      title: "Organic Search Automation Engine",
+      role: "SEO & Systematization",
+      description: "Built a multi-week content distribution algorithm for Pinterest. Scaled organic impressions to 4.3K+ weekly, capturing high-intent US buyer traffic with zero ad-spend dependency.",
       tech: ["Pinterest SEO", "Canva Pro", "Visual Storytelling", "Keyword Mapping"],
       icon: <TrendingUp className="w-6 h-6 text-purple-400" />,
       image: "/project3.jpg"
@@ -33,17 +33,17 @@ export default function Projects() {
   const skills = [
     {
       category: "Performance",
-      items: "Meta Ads, Google Ads, A/B Testing, Media Buying, Funnel Optimization, Lead Generation.",
+      items: "Meta Ads Manager, Google Ads, TikTok Ads, Klaviyo Lifecycle Flows, Triple Whale Data Logic, Media Buying.",
       icon: <Zap className="w-5 h-5 text-yellow-400" />
     },
     {
       category: "Technical",
-      items: "Python, HTML, CSS, Shopify Architecture, Conversion Tracking (Pixels/GA4).",
+      items: "Python (Data Analysis), HTML/CSS, React/Next.js (Frontend), Shopify Liquid, Meta Conversion API (CAPI), Google Tag Manager.",
       icon: <Code className="w-5 h-5 text-indigo-400" />
     },
     {
       category: "Creative",
-      items: "AI Image Generation (Cinematic/Realistic), UGC Scriptwriting, Canva Pro Expert, Video Editing.",
+      items: "High-Converting Hook Scripting, CapCut Video Editing, Canva Pro, Direct-Response Visual Design.",
       icon: <Palette className="w-5 h-5 text-pink-400" />
     }
   ];
@@ -59,22 +59,22 @@ export default function Projects() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div>
-                <h4 className="text-2xl font-bold text-white">E-Commerce Store Owner & Growth Lead</h4>
-                <p className="text-blue-400 font-medium mt-1">Independent Venture</p>
+                <h4 className="text-2xl font-bold text-white">Technical Growth Lead</h4>
+                <p className="text-blue-400 font-medium mt-1">International E-Commerce Ventures (UAE/US Markets)</p>
               </div>
               <span className="px-4 py-1.5 rounded-full bg-zinc-800 text-sm font-medium whitespace-nowrap">
-                Early 2024 – Present
+                2024 – Present
               </span>
             </div>
             <p className="mt-6 text-zinc-400 leading-relaxed max-w-4xl relative z-10 text-lg">
-              Independently built and managed end-to-end Shopify dropshipping operations. Handled everything from storefront development and international payment gateways to UGC video production and bilingual (English/Arabic) copywriting. Transitioned a foundational background in Computer Science into building scalable, data-driven revenue engines.
+              Architected end-to-end performance marketing ecosystems for independent e-commerce ventures. Managed Meta ad deployments, custom Shopify tracking integrations, and deep-dive data analysis using Python. Consistently beat market averages by combining aggressive creative testing with flawless technical tracking.
             </p>
           </div>
         </div>
 
         {/* Case Studies Grid */}
         <div className="mb-24">
-          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">Case Studies</h3>
+          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">The Engineering & Growth Audits</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {caseStudies.map((study, idx) => (
               <div 
@@ -118,7 +118,7 @@ export default function Projects() {
 
         {/* Arsenal / Skills Grid */}
         <div>
-          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">Arsenal & Tooling</h3>
+          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">The Technical Stack</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {skills.map((skill, idx) => (
               <div key={idx} className="p-6 rounded-2xl bg-zinc-900/30 border border-zinc-800/50 flex flex-col gap-4 hover:bg-zinc-900/50 transition-colors">

@@ -8,17 +8,17 @@ export default function ProofSection() {
   const proofs = [
     {
       image: "/proofs/proof1.jpeg",
-      caption: "Meta Ads: 7.04% CTR & $0.02 CPC",
+      caption: "AED 0.0734 CPC with 7.04% CTR on Meta Ads.",
       alt: "Meta Ads Dashboard"
     },
     {
       image: "/proofs/proof2.jpeg",
-      caption: "Funnel Diagnostics: 6% View-to-ATC drop-off identified",
+      caption: "Flawless First-Party Pixel Tracking Integration.",
       alt: "Funnel Diagnostics Dashboard"
     },
     {
       image: "/proofs/proof3.jpeg",
-      caption: "Organic Scale: 4.3K+ Visual Search Impressions",
+      caption: "Pinterest Organic Engine Scaling.",
       alt: "Pinterest Analytics Dashboard"
     }
   ];
@@ -43,10 +43,10 @@ export default function ProofSection() {
         <div className="max-w-6xl mx-auto">
           <div className="mb-16 text-center md:text-left">
             <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-500">
-              Proof of Execution.
+              The Data. No Fluff.
             </h3>
             <p className="text-xl text-zinc-400 font-medium">
-              The raw data and analytics behind the case studies.
+              Screenshots directly from the dashboard. The numbers speak for themselves.
             </p>
           </div>
 
