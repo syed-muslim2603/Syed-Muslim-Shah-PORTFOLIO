@@ -35,9 +35,17 @@ export default function Overlay({ containerRef }: OverlayProps) {
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-2xl">
           Muslim Shah.
         </h1>
-        <p className="mt-6 text-xl md:text-2xl text-zinc-300 font-medium tracking-wide drop-shadow-md">
+        <p className="mt-6 mb-10 text-xl md:text-2xl text-zinc-300 font-medium tracking-wide drop-shadow-md">
           E-Commerce Growth Specialist.
         </p>
+        <button
+          onClick={() => {
+            document.getElementById('proof-section')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="pointer-events-auto px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold text-lg transition-all shadow-[0_0_30px_-5px_rgba(52,211,153,0.4)] hover:shadow-[0_0_40px_-5px_rgba(52,211,153,0.6)] hover:-translate-y-1"
+        >
+          View The Raw Data
+        </button>
       </motion.div>
 
       {/* Section 2 */}

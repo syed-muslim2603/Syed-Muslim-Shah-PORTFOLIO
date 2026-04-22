@@ -39,7 +39,7 @@ export default function ProofSection() {
 
   return (
     <>
-      <section className="relative z-20 bg-[#121212] pt-12 pb-24 px-4 md:px-8 text-zinc-100 border-t border-zinc-800/50">
+      <section id="proof-section" className="relative z-20 bg-[#121212] pt-12 pb-24 px-4 md:px-8 text-zinc-100 border-t border-zinc-800/50">
         <div className="max-w-6xl mx-auto">
           <div className="mb-16 text-center md:text-left">
             <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-500">
