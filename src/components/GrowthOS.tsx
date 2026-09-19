@@ -40,8 +40,7 @@ export default function GrowthOS() {
             transition={{ delay: 0.1 }}
             className="text-xl md:text-2xl text-zinc-400 font-medium max-w-3xl leading-relaxed"
           >
-            I don&apos;t collect polished client quotes; I build independent
-            ventures. Here are the core principles that drive my work.
+            Selected independent builds, campaign tests, and measurement audits.
           </motion.p>
         </div>
 
