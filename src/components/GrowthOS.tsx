@@ -6,26 +6,26 @@ export default function GrowthOS() {
   const principles = [
     {
       num: "01",
-      title: "Code is the Ultimate Marketer.",
-      body: "Marketers who can't read code are flying blind. I refuse to rely on basic pixel setups. I build the tracking infrastructure, audit the CAPI server events, and fix the funnel leaks before I spend a single dollar on ads."
+      title: "Measurement before scaling.",
+      body: "Campaign decisions are only as reliable as the events and revenue signals behind them. I review the measurement layer before treating platform data as final.",
     },
     {
       num: "02",
-      title: "Creative Solves the CAC.",
-      body: "Scaling isn't about tricking the algorithm with bidding hacks. It's about engineering pattern-interrupt visual hooks. A $0.02 CPC is the direct result of giving the platform exactly what the users want to see."
+      title: "Creative testing is a system.",
+      body: "Creative performance improves through structured testing of hooks, angles, formats, and audience context—not isolated guesses.",
     },
     {
       num: "03",
-      title: "The Market is the Only Judge.",
-      body: "I do not rely on subjective opinions or marketing theory. The dashboard is the ultimate source of truth. If a 7.04% CTR proves an angle works, we scale it. If the data shows a bottleneck, I write the Python script to find out why. Speed of execution beats perfection."
-    }
+      title: "Evidence drives the next action.",
+      body: "Dashboards, exports, and event trails should lead to a clear decision: fix the signal, investigate the funnel, or scale with defined limits.",
+    },
   ];
 
   return (
     <section className="relative z-20 bg-[#121212] pt-24 pb-20 px-4 md:px-8 border-t border-zinc-800/50 text-zinc-100 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="mb-16 md:mb-24">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -33,21 +33,22 @@ export default function GrowthOS() {
           >
             The Growth OS
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
             className="text-xl md:text-2xl text-zinc-400 font-medium max-w-3xl leading-relaxed"
           >
-            I don't collect polished client quotes; I build independent ventures. Here are the core principles that drive my results.
+            I don&apos;t collect polished client quotes; I build independent
+            ventures. Here are the core principles that drive my work.
           </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative">
           {/* Subtle connecting line on desktop */}
           <div className="hidden md:block absolute top-12 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-          
+
           {principles.map((p, idx) => (
             <motion.div
               key={idx}
@@ -63,11 +64,11 @@ export default function GrowthOS() {
                   {p.num}.
                 </span>
               </div>
-              
+
               <h3 className="text-2xl font-bold text-white mb-4 leading-snug">
                 {p.title}
               </h3>
-              
+
               <p className="text-zinc-400 leading-relaxed text-lg group-hover:text-zinc-300 transition-colors duration-300">
                 {p.body}
               </p>

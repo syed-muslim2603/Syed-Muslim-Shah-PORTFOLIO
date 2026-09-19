@@ -10,13 +10,12 @@ const inter = Inter({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 export const metadata: Metadata = {
-  title: "Muslim Shah | E-Commerce Growth Specialist",
-  description: "Personal Portfolio of Muslim Shah - E-Commerce Growth Specialist",
+  title: "Syed Muslim Shah | Technical Performance Marketer",
+  description:
+    "Technical Performance Marketer specializing in paid acquisition, e-commerce measurement, Shopify tracking diagnostics, and funnel analysis.",
 };
 
 export default function RootLayout({
@@ -29,9 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} h-full antialiased bg-[#121212] text-[#ededed]`}
     >
-      <body className="min-h-full flex flex-col no-scrollbar">
-        {children}
-      </body>
+      <body className="min-h-full flex flex-col no-scrollbar">{children}</body>
     </html>
   );
 }
